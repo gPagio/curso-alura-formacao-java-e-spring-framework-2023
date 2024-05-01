@@ -11,4 +11,16 @@ public record Veiculo(@JsonAlias("TipoVeiculo") Integer tipoVeiculo,
                       @JsonAlias("CodigoFipe") String codigoFipe,
                       @JsonAlias("MesReferencia") String mesReferencia,
                       @JsonAlias("SiglaCombustivel") String siglaCombustivel) {
+    @Override
+    public String toString() {
+        return "Tipo Veículo: " + tipoVeiculo + "\n" +
+                "Valor: " + valor + "\n" +
+                "Marca: " + marca + "\n" +
+                "Modelo: " + modelo + "\n" +
+                "Ano Modelo: " + anoModelo + "\n" +
+                "Combustível: " + combustivel + "\n" +
+                "Código Fipe: " + codigoFipe + "\n" +
+                "Mês Referência: " + mesReferencia + "\n" +
+                "Sigla Combustível: " + siglaCombustivel;
+    }
 }
