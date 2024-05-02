@@ -33,10 +33,8 @@ public class Principal {
                 """);
         System.out.print("Digite aqui >>> ");
         var tipoDeVeiculoPesquisado = teclado.nextLine();
-        System.out.println("Escolheu " + tipoDeVeiculoPesquisado);
 
         String endereco;
-
         if (tipoDeVeiculoPesquisado.trim().toLowerCase().contains("mot")){
             endereco = URL_BASE + "motos/marcas";
         } else if (tipoDeVeiculoPesquisado.trim().toLowerCase().contains("carr")){
@@ -48,18 +46,14 @@ public class Principal {
         List<DadosBase> marcaVeiculoList = converteDados.serializaLista(consumoAPI.obterDados(endereco), DadosBase.class);
         marcaVeiculoList.stream().sorted(Comparator.comparing(marcaVeiculo -> marcaVeiculo.nome().toLowerCase())).forEach(System.out::println);
 
-        System.out.println();
-        System.out.print("Informe o codigo da marca do veículo que deseja >>> ");
+        System.out.print("\nInforme o codigo da marca do veículo que deseja >>> ");
         var codigoMarcaVeiculoPesquisado = teclado.nextLine();
         endereco = endereco+"/"+codigoMarcaVeiculoPesquisado+"/modelos";
-
-        System.out.println(endereco);
 
         var modeloVeiculoList = converteDados.serializaDados(consumoAPI.obterDados(endereco), ModeloVeiculo.class);
         modeloVeiculoList.modelos().stream().sorted(Comparator.comparing(modelo -> modelo.nome().toLowerCase())).forEach(System.out::println);
 
-        System.out.println();
-        System.out.print("Informe o codigo do modelo do veículo que deseja >>> ");
+        System.out.print("\nInforme o codigo do modelo do veículo que deseja >>> ");
         var codigoModeloVeiculoPesquisado = teclado.nextLine();
         endereco = endereco+"/"+codigoModeloVeiculoPesquisado+"/anos";
 
