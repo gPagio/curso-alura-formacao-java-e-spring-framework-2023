@@ -3,9 +3,11 @@ package br.com.alura.screenmatch.service;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 
+import java.util.Scanner;
+
 public class ConsultaChatGPT {
     public static String obterTraducao(String texto) {
-        OpenAiService service = new OpenAiService("cole aqui sua chave");
+        OpenAiService service = new OpenAiService(obtemKeyAPI());
 
 
         CompletionRequest requisicao = CompletionRequest.builder()
@@ -18,5 +20,12 @@ public class ConsultaChatGPT {
 
         var resposta = service.createCompletion(requisicao);
         return resposta.getChoices().get(0).getText();
+    }
+
+    private static String obtemKeyAPI(){
+        Scanner s = new Scanner(System.in);
+        System.out.print("Digite sua chave da API do ChatGPT >>> ");
+        String chave = s.nextLine();
+        return chave;
     }
 }
