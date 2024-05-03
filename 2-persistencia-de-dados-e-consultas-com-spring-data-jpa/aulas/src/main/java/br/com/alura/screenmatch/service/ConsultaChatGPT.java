@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class ConsultaChatGPT {
     public static String obterTraducao(String texto) {
-        OpenAiService service = new OpenAiService(obtemKeyAPI());
+        OpenAiService service = new OpenAiService(System.getenv("OPENAI_APIKEY"));
 
 
         CompletionRequest requisicao = CompletionRequest.builder()
@@ -20,12 +20,5 @@ public class ConsultaChatGPT {
 
         var resposta = service.createCompletion(requisicao);
         return resposta.getChoices().get(0).getText();
-    }
-
-    private static String obtemKeyAPI(){
-        Scanner s = new Scanner(System.in);
-        System.out.print("Digite sua chave da API do ChatGPT >>> ");
-        String chave = s.nextLine();
-        return chave;
     }
 }

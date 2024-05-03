@@ -25,6 +25,8 @@ public class Serie {
     @Transient
     private List<Episodio> episodios = new ArrayList<>();
 
+    public Serie(){}
+
     public Serie(DadosSerie dadosSerie){
         this.titulo = dadosSerie.titulo();
         this.totalTemporadas = dadosSerie.totalTemporadas();
@@ -98,15 +100,13 @@ public class Serie {
 
     @Override
     public String toString() {
-        return
-                "genero=" + genero +
-                        ", titulo='" + titulo + '\'' +
-                        ", totalTemporadas=" + totalTemporadas +
-                        ", avaliacao=" + avaliacao +
-
-                        ", atores='" + atores + '\'' +
-                        ", poster='" + poster + '\'' +
-                        ", sinopse='" + sinopse + '\'';
+        return "Genero: " + genero +
+             ", Título: " + titulo +
+             ", Total de temporadas: " + totalTemporadas +
+             ", Avaliação: " + avaliacao +
+             ", Atores: " + atores +
+             ", Pôster: " + poster +
+             ", Sinopse: " + sinopse;
     }
 
     public List<Episodio> getEpisodios() {
