@@ -22,7 +22,7 @@ public class Serie {
     private String atores;
     private String poster;
     private String sinopse;
-    @Transient
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(){}
@@ -38,9 +38,13 @@ public class Serie {
         this.sinopse = dadosSerie.sinopse().trim();
     }
 
-    public long getId() { return id; }
+    public long getId() {
+        return id;
+    }
 
-    public void setId(long id) { this.id = id; }
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getTitulo() {
         return titulo;
@@ -106,7 +110,8 @@ public class Serie {
              ", Avaliação: " + avaliacao +
              ", Atores: " + atores +
              ", Pôster: " + poster +
-             ", Sinopse: " + sinopse;
+             ", Sinopse: " + sinopse +
+             ", Episodios: " + episodios;
     }
 
     public List<Episodio> getEpisodios() {
@@ -114,6 +119,7 @@ public class Serie {
     }
 
     public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(ep -> ep.setSerie(this));
         this.episodios = episodios;
     }
 }
