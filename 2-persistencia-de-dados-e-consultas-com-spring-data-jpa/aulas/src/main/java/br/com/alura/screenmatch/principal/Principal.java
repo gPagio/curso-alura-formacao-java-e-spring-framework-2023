@@ -151,11 +151,11 @@ public class Principal {
         var nomeAtor = leitura.nextLine();
         System.out.println("Avaliações a partir de qual valor?");
         var avaliacao = leitura.nextDouble();
-        Optional<List<Serie>> serieBuscada = repositorio.findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(nomeAtor, avaliacao);
+        List<Serie> serieBuscada = repositorio.findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(nomeAtor, avaliacao);
 
-        if (serieBuscada.isPresent()){
+        if (!serieBuscada.isEmpty()){
             System.out.println("Séries em que " + nomeAtor.substring(0, 1).toUpperCase() + nomeAtor.substring(1) + " participou: ");
-            serieBuscada.get().forEach(s -> System.out.println(s.getTitulo() + ", avaliação: " + s.getAvaliacao()));
+            serieBuscada.forEach(s -> System.out.println(s.getTitulo() + ", avaliação: " + s.getAvaliacao()));
         } else {
             System.out.println("O ator não está em nenhuma série registrada!");
         }
@@ -188,10 +188,10 @@ public class Principal {
         var avaliacaoMinima = leitura.nextDouble();
         leitura.nextLine();
 
-        Optional<List<Serie>> seriesParaAssistir = repositorio.findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(totalTemporadas, avaliacaoMinima);
-        if (seriesParaAssistir.isPresent()){
+        List<Serie> seriesParaAssistir = repositorio.seriesPorTemporadaEAValiacao(totalTemporadas, avaliacaoMinima);
+        if (!seriesParaAssistir.isEmpty()){
             System.out.println("Séries com até " + totalTemporadas + " temporadas e avaliação mínima de " + avaliacaoMinima);
-            seriesParaAssistir.get().forEach(s -> System.out.println(s.getTitulo() + ", avaliação: " + s.getAvaliacao()));
+            seriesParaAssistir.forEach(s -> System.out.println(s.getTitulo() + ", avaliação: " + s.getAvaliacao()));
         } else {
             System.out.println("Nenhuma série encontrada com os critérios informados");
         }
