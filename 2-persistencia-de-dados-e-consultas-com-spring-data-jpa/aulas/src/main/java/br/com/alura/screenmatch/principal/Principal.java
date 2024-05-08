@@ -4,7 +4,10 @@ import br.com.alura.screenmatch.model.*;
 import br.com.alura.screenmatch.repository.SerieRepository;
 import br.com.alura.screenmatch.service.ConsumoApi;
 import br.com.alura.screenmatch.service.ConverteDados;
+import jakarta.persistence.NonUniqueResultException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
+import java.time.Year;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,6 +41,7 @@ public class Principal {
                     8 - Buscar Série com Numero Maximo de Temporadas e Avaliação Mínima
                     9 - Buscar Episódios por Trecho
                     10 - Buscar Top Episódios por Serie
+                    11 - Buscar episódios a partir de uma data
                                     
                     0 - Sair                                 
                     """;
@@ -77,6 +81,9 @@ public class Principal {
                 case 10:
                     buscarTopEpisodiosPorSerie();
                     break;
+                case 11:
+                    buscarEpisodiosDepoisDeUmaData();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -88,9 +95,6 @@ public class Principal {
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-//        dadosSeries.add(dados);
-//        System.out.println(dados);
-
         repositorio.save(new Serie(dados));
     }
 
@@ -133,10 +137,6 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas(){
-//        List<Serie> series = new ArrayList<>();
-//        series = dadosSeries.stream()
-//                .map(d -> new Serie(d))
-//                .collect(Collectors.toList());
         series = repositorio.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
@@ -146,12 +146,17 @@ public class Principal {
     private void buscarSeriePorTitulo() {
         System.out.println("Digite o nome da série para busca");
         var nomeSerie = leitura.nextLine();
-        serieBusca = repositorio.findByTituloContainingIgnoreCase(nomeSerie);
 
-        if (serieBusca.isPresent()){
-            System.out.println("Dados da série: " + serieBusca.get());
-        } else {
-            System.out.println("Série não encontrada!");
+        try {
+            serieBusca = repositorio.findByTituloContainingIgnoreCase(nomeSerie);
+
+            if (serieBusca.isPresent()){
+                System.out.println("Dados da série: " + serieBusca.get());
+            } else {
+                System.out.println("Série não encontrada!");
+            }
+        } catch (NonUniqueResultException | IncorrectResultSizeDataAccessException e){
+            System.out.println("Informe um nome mais específico, pois foram encontradas mais de uma série!");
         }
     }
 
@@ -223,6 +228,25 @@ public class Principal {
         if (serieBusca.isPresent()){
             Serie serie = serieBusca.get();
             List<Episodio> topEpisodios = repositorio.topEpisodiosPorSerie(serie);
+
+            if (!topEpisodios.isEmpty()){
+                topEpisodios.forEach(e -> System.out.printf("Série: %s Temporada %s - Episódio %s - %s Avaliação %.2f\n", e.getSerie().getTitulo(), e.getTemporada(), e.getNumeroEpisodio(), e.getTitulo(), e.getAvaliacao()));
+            }
+        }
+    }
+
+    private void buscarEpisodiosDepoisDeUmaData(){
+        buscarSeriePorTitulo();
+
+        if (serieBusca.isPresent()){
+            System.out.println("Digite o ano limite de lançamento");
+            var anoLancamento = leitura.nextInt();
+            leitura.nextLine();
+
+            List<Episodio> episodiosAno = repositorio.episodiosPorSerieEAno(serieBusca.get(), anoLancamento);
+            episodiosAno.forEach(e -> System.out.printf("Série: %s Temporada %s - Episódio %s - %s Ano Lançamento Episódio %d\n", e.getSerie().getTitulo(), e.getTemporada(), e.getNumeroEpisodio(), e.getTitulo(), e.getDataLancamento().getYear()));
+        } else {
+            System.out.println("Nenhum episódio encontrado com as informações fornecidas!");
         }
     }
 }
