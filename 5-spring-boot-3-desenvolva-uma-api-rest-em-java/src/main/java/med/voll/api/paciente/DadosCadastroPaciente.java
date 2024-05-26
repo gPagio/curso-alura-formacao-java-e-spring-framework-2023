@@ -7,6 +7,5 @@ public record DadosCadastroPaciente(
         String email,
         String telefone,
         String cpf,
-        DadosEndereco endereco
-) {
+        DadosEndereco endereco) {
 }
