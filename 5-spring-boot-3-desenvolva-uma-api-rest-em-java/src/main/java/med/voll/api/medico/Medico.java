@@ -12,7 +12,7 @@ import med.voll.api.endereco.Endereco;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "idMedico")
+@EqualsAndHashCode(of = "id")
 public class Medico {
 
     @Id
@@ -30,6 +30,8 @@ public class Medico {
     @Embedded
     private Endereco endereco;
 
+    private Boolean ativo;
+
     public Medico(DadosCadastroMedico dadosCadastroMedico) {
         this.nome = dadosCadastroMedico.nome();
         this.email = dadosCadastroMedico.email();
@@ -37,6 +39,7 @@ public class Medico {
         this.crm = dadosCadastroMedico.crm();
         this.especialidade = dadosCadastroMedico.especialidade();
         this.endereco = new Endereco(dadosCadastroMedico.endereco());
+        this.ativo = true;
     }
 
     public Long getId() {
@@ -93,5 +96,15 @@ public class Medico {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public void atualizarInformacoes(DadosAtualizacaoMedico dadosAtualizacaoMedico) {
+        if (dadosAtualizacaoMedico.nome() != null) this.nome = dadosAtualizacaoMedico.nome();
+        if (dadosAtualizacaoMedico.telefone() != null) this.telefone = dadosAtualizacaoMedico.telefone();
+        if (dadosAtualizacaoMedico.endereco() != null) this.endereco.atualizaInformacoes(dadosAtualizacaoMedico.endereco());
+    }
+
+    public void excluir() {
+        this.ativo = false;
     }
 }
